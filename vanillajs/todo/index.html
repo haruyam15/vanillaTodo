@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="qlWq_CUC1b47Du6XBAIy4pnqCxAMjAFb6NId9dmarTE" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Todo</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+    <div id="wrap" class=""> <!-- logined toggle -->
+
+        <div class="loginWrap">
+            <div class="loginBox">
+                <p class ="loginTop">Login</p>
+
+                <div class="loginMid">
+                    <form class="formLogin">
+                        <label for="userName">User Name</label>
+                        <input type="text" name="userName" id="userName" placeholder="입력 후 Enter" maxlength="20" autocomplete="off"/>
+                        <button class="btnLogin">ENTER</button>
+                        <p>이름을 입력해주세요.</p>
+                    </form>
+                </div>
+
+                <p class="loginBot">사용자의 이름을 입력하여 로그인해주세요.</p>
+
+            </div>
+        </div>
+        <div class="content">
+            <div class="left">
+                <h1 id="hi">
+                    Hello <span class="userName">하은</span>!
+                </h1>
+
+                <div class="timeWrap">
+                    <p class="clock">오후 04:15분</p>
+                    <p class="date">2022년 08월 05일</p>
+                </div>
+
+                <div class="makeList">
+                    <p>해야 할 일을 이곳에 하나하나 적어보세요!</p>
+
+                    <div class="listMaker">
+                        <form class="formListMaker">
+                            <input type="text" name="inputListMaker" id="inputListMaker" placeholder="입력 후 Enter" autocomplete="off"/>
+                            <button class="btnListMaker">만들기</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="weather">
+                    <p></p>
+                </div>
+            </div>
+
+            <div class="right"> <!-- 리스트 없을 시 .empty -->
+                <ul class="todoList">
+                    <!-- <li>
+                        리스트가 없습니다.
+                    </li> -->
+                    <!-- <li>
+                        <span class="checkboxImg"></span>
+                        <input type="checkbox" name="ck4" value="ck4" id="ck4" />
+                        <label for="ck4">수학</label>
+                        <span class="btnListDel">삭제</span>
+                    </li>
+                    <li>
+                        <span class="checkboxImg"></span>
+                        <input type="checkbox" name="ck2" value="ck2" id="ck2" />
+                        <label for="ck2">노마드코더 강의 듣기</label>
+                        <span class="btnListDel">삭제</span>
+                    </li>
+                    <li>
+                        <span class="checkboxImg"></span>
+                        <input type="checkbox" name="ck3" value="ck3" id="ck3" />
+                        <label for="ck3">길때 어떻게 처리할꺼냐길때 어떻게 처리할꺼냐길때 어떻게 처리할꺼냐길때 어떻게 처리할꺼냐</label>
+                        <span class="btnListDel">삭제</span>
+                    </li>
+                    <li class="checked">
+                        <span class="checkboxImg"></span>
+                        <input type="checkbox" name="ck1" value="ck1" id="ck1" />
+                        <label for="ck1">todo 리스트 만들기</label>
+                        <span class="btnListDel">삭제</span>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+        <!--end -->
+    </div>
+    <!-- end #wrap -->
+    <script type="text/javascript" src="./js/app.js"></script>
+</body>
+</html>
