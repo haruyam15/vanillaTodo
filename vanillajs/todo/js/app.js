@@ -11,12 +11,14 @@ document.addEventListener("DOMContentLoaded", function(){
     let todoListArr = JSON.parse(localStorage.getItem(TODOLISTARR_KEY)) ? JSON.parse(localStorage.getItem(TODOLISTARR_KEY)) : [];
     const bgArr = ["bg1.jpg", "bg2.jpg", "bg3.jpg", "bg4.jpg"]
 
+    //로그인 여부 확인
     let isLogin = function(){
         if(localStorage.getItem(USERNAME_KEY) !==  null){
             return true;
         }
         return false;
     }
+
     if(isLogin()){
         renderContent();
     }else{
@@ -24,30 +26,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     eventListener();
-    time();
-    setInterval(time, 1000);
-    navigator.geolocation.getCurrentPosition(onGeoOk, onGeoErr);
-
-
-    function loadBg(){
-        document.querySelector("#wrap.logined").style.backgroundImage = `url(images/${bgArr[Math.floor(Math.random() * bgArr.length)]})`;
-    }
-
-    function onGeoOk(position){
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHERAPI_KEY}&units=metric`
-        fetch(url).then(response => response.json()).then(data => {
-            const name = data.name;
-            const weather = data.weather[0].main;
-            const temp = data.main.temp;
-            document.querySelector(".weather p").innerText = `${name} ${weather} ${temp}`
-        })
-    };
-
-    function onGeoErr(){
-        alert("위치를 알 수 없습니다.");
-    };
 
     function eventListener(){
         formLogin.addEventListener("submit", loginCheck);
@@ -64,12 +42,75 @@ document.addEventListener("DOMContentLoaded", function(){
             loginBox.style.animationName = "none";
         });
 
-        document.querySelector(".formListMaker").addEventListener("submit", submitTodo);
+        document.querySelector(".formListMaker").addEventListener("submit", submitList);
 
+        document.querySelectorAll(".todoList .btnDel").forEach((item, i) => {
+            item.addEventListener("click", delList)
+        });
+    };
+
+    function renderContent(){
+        wrap.classList.add("logined");
+        document.querySelector(".content .userName").innerText = localStorage.getItem(USERNAME_KEY);
+        time();
+        setInterval(time, 1000);
+        loadBg();
+        loadList();
+
+        console.log(navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(onGeoOk, onGeoErr);
+
+    }
+
+    function loadBg(){
+        document.querySelector("#wrap.logined").style.backgroundImage = `url(images/${bgArr[Math.floor(Math.random() * bgArr.length)]})`;
+    }
+
+    function loadList(){
+        todoListArr.forEach(renderList);
+    }
+
+    function renderList(todo){
+        const li = document.createElement("li");
+        li.id = todo.id;
+        const span = document.createElement("span");
+        const button = document.createElement("button");
+        button.className = "btnDel";
+        li.appendChild(span);
+        li.appendChild(button);
+        span.innerText = todo.text;
+        button.innerText = "삭제";
+        document.querySelector(".right .todoList").appendChild(li);
 
     };
 
+    function submitList(event){
+        event.preventDefault();
 
+        if(inputListMaker.value.length !== 0){
+            const newTodos = {
+                id : Date.now(),
+                text : inputListMaker.value
+            };
+            todoListArr.push(newTodos);
+            renderList(newTodos);
+            saveList();
+            document.querySelector(".formListMaker").reset();
+        }else{
+            alert("내용을 입력하세요");
+        }
+    }
+
+    function delList(event){
+        const li = event.target.parentElement;
+        li.remove();
+        todoListArr = todoListArr.filter((item) => item.id !== parseInt(li.id)); //id가 다르면 남겨두자
+        saveList();
+    };
+
+    function saveList(){
+        localStorage.setItem(TODOLISTARR_KEY, JSON.stringify(todoListArr));
+    }
 
     function loginCheck(event){
         event.preventDefault();
@@ -87,13 +128,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
         renderContent();
         formLogin.reset();
-    }
-
-    function renderContent(){
-        wrap.classList.add("logined");
-        document.querySelector(".content .userName").innerText = localStorage.getItem(USERNAME_KEY);
-        loadBg();
-        getList();
     }
 
     function time(){
@@ -124,55 +158,22 @@ document.addEventListener("DOMContentLoaded", function(){
         document.querySelector(".timeWrap .date").innerText = `${year}년 ${month}월 ${date}일 ${week[day]}요일`;
     }
 
-    function submitTodo(event){
-        event.preventDefault();
-
-        if(inputListMaker.value.length !== 0){
-            const newTodos = {
-                id : Date.now(),
-                text : inputListMaker.value
-            };
-            todoListArr.push(newTodos);
-            renderList(newTodos);
-            saveList();
-            document.querySelector(".formListMaker").reset();
-        }else{
-            alert("내용을 입력하세요");
-        }
-    }
-
-    function renderList(todo){
-        const li = document.createElement("li");
-        if(todoListArr.length === 0){
-            alert("a");
-        }
-        li.id = todo.id;
-        const span = document.createElement("span");
-        const button = document.createElement("button");
-        li.appendChild(span);
-        li.appendChild(button);
-        span.innerText = todo.text;
-        button.innerText = "삭제";
-        document.querySelector(".right .todoList").appendChild(li);
-
-        button.addEventListener("click", delList);
-
+    function onGeoOk(position){
+        console.log(position)
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHERAPI_KEY}&units=metric`
+        fetch(url).then(response => response.json()).then(data => {
+            const name = data.name;
+            const weather = data.weather[0].main;
+            const temp = data.main.temp;
+            document.querySelector(".weather p").innerText = `${name} ${weather} ${temp}`
+        })
     };
 
-    function delList(event){
-        const li = event.target.parentElement;
-        li.remove();
-        todoListArr = todoListArr.filter((item) => item.id !== parseInt(li.id));
-        saveList();
+    function onGeoErr(){
+        alert("위치를 알 수 없습니다.");
     };
-
-    function saveList(){
-        localStorage.setItem(TODOLISTARR_KEY, JSON.stringify(todoListArr));
-    }
-
-    function getList(){
-        todoListArr.forEach(renderList);
-    }
 
 
 });
