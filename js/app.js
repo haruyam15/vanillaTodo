@@ -43,10 +43,6 @@ document.addEventListener("DOMContentLoaded", function(){
         });
 
         document.querySelector(".formListMaker").addEventListener("submit", submitList);
-
-        document.querySelectorAll(".todoList .btnDel").forEach((item, i) => {
-            item.addEventListener("click", delList)
-        });
     };
 
     function renderContent(){
@@ -57,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function(){
         loadBg();
         loadList();
 
-        console.log(navigator.geolocation)
+        // console.log(navigator.geolocation)
         navigator.geolocation.getCurrentPosition(onGeoOk, onGeoErr);
 
     }
@@ -76,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const span = document.createElement("span");
         const button = document.createElement("button");
         button.className = "btnDel";
+        button.addEventListener("click", delList)
         li.appendChild(span);
         li.appendChild(button);
         span.innerText = todo.text;
@@ -159,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     function onGeoOk(position){
-        console.log(position)
+        // console.log(position)
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHERAPI_KEY}&units=metric`
